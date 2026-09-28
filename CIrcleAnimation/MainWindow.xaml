@@ -1,0 +1,73 @@
+﻿<Window x:Class="CircleAnimation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Движение кружка по окружности"
+        Height="650" Width="900">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="8,4"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="8,4"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верх: холст с анимацией -->
+        <GroupBox Grid.Row="0" Header="Анимация" Margin="10">
+            <Canvas Width="300" Height="300"
+                    Background="WhiteSmoke"
+                    HorizontalAlignment="Center">
+
+                <!-- Большая окружность (траектория) — для наглядности -->
+                <Ellipse Width="200" Height="200"
+                         Canvas.Left="50" Canvas.Top="50"
+                         Stroke="LightGray"
+                         StrokeThickness="1"
+                         StrokeDashArray="4,4"/>
+
+                <!-- Маленький кружок, который двигается -->
+                <Ellipse Width="40" Height="40"
+                         Fill="SteelBlue"
+                         Stroke="DarkBlue"
+                         StrokeThickness="2"
+                         Canvas.Left="{Binding CircleX}"
+                         Canvas.Top="{Binding CircleY}"/>
+            </Canvas>
+        </GroupBox>
+
+        <!-- Середина: кнопка + статус -->
+        <StackPanel Grid.Row="1" Orientation="Vertical"
+                    HorizontalAlignment="Center" Margin="10">
+            <Button Content="{Binding ButtonText}"
+                    Command="{Binding ToggleCommand}"
+                    Width="150"/>
+            <TextBlock Text="{Binding StatusMessage}"
+                       Foreground="DarkBlue"
+                       FontStyle="Italic"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Низ: история запусков из БД -->
+        <GroupBox Grid.Row="2" Header="История запусков" Margin="10,0,10,10">
+            <ListView ItemsSource="{Binding Records}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Id" Width="80"
+                                        DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="Время запуска" Width="250"
+                                        DisplayMemberBinding="{Binding StartedAt}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+    </Grid>
+</Window>
